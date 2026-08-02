@@ -1,6 +1,11 @@
 import { useState, useCallback, useEffect } from 'react';
 import Dashboard from './components/Dashboard';
 import SnakeGamePage from './games/snake/SnakeGame';
+import TetrisGamePage from './games/tetris/TetrisGame';
+import BreakoutGamePage from './games/breakout/BreakoutGame';
+import MinesweeperGamePage from './games/minesweeper/MinesweeperGame';
+import FlappyGamePage from './games/flappy/FlappyGame';
+import Game2048Page from './games/2048/Game2048';
 
 type Screen = { type: 'dashboard' } | { type: 'game'; gameId: string };
 
@@ -45,20 +50,25 @@ export default function App() {
     };
   }, [screen.type]);
 
+  const BG_DARK = 'linear-gradient(135deg, #050510 0%, #0a0a2e 50%, #050510 100%)';
+
   const renderContent = () => {
     if (screen.type === 'game') {
+      const wrap = (child: React.ReactNode) => (
+        <div className="game-scroll-container" style={{ background: BG_DARK }}>
+          <div className="flex min-h-full items-center justify-center py-4">
+            {child}
+          </div>
+        </div>
+      );
+
       switch (screen.gameId) {
-        case 'snake':
-          return (
-            <div
-              className="game-scroll-container"
-              style={{ background: 'linear-gradient(135deg, #050510 0%, #0a0a2e 50%, #050510 100%)' }}
-            >
-              <div className="flex min-h-full items-center justify-center py-4">
-                <SnakeGamePage onBack={handleBack} />
-              </div>
-            </div>
-          );
+        case 'snake':    return wrap(<SnakeGamePage onBack={handleBack} />);
+        case 'tetris':   return wrap(<TetrisGamePage onBack={handleBack} />);
+        case 'breakout': return wrap(<BreakoutGamePage onBack={handleBack} />);
+        case 'minesweeper': return wrap(<MinesweeperGamePage onBack={handleBack} />);
+        case 'flappy':   return wrap(<FlappyGamePage onBack={handleBack} />);
+        case '2048':     return wrap(<Game2048Page onBack={handleBack} />);
         default:
           handleBack();
           return null;
@@ -67,6 +77,7 @@ export default function App() {
 
     return <Dashboard onSelectGame={handleSelectGame} />;
   };
+
 
   return (
     <div
