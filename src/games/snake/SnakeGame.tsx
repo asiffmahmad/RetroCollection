@@ -257,15 +257,18 @@ export default function SnakeGamePage({ onBack }: SnakeGamePageProps) {
 
       {/* ── Canvas ── */}
       <div
-        ref={containerRef}
-        className="relative rounded-2xl overflow-hidden w-full"
+        className="relative rounded-2xl overflow-hidden w-full aspect-square max-w-[450px]"
         style={{
-          maxWidth: CANVAS_SIZE,
-          aspectRatio: '1',
-          boxShadow: `0 0 30px ${COLORS.accent}22, 0 4px 24px rgba(0,0,0,0.5)`,
+          boxShadow: `0 0 40px ${COLORS.accent}22, 0 4px 24px rgba(0,0,0,0.4)`,
         }}
+        ref={containerRef}
       >
-        <canvas ref={canvasRef} className="block w-full h-full" style={{ imageRendering: 'auto' }} />
+        <canvas
+          ref={canvasRef}
+          width={CANVAS_SIZE}
+          height={CANVAS_SIZE}
+          className="block w-full h-full object-contain"
+        />
 
         {/* Start overlay */}
         {gameState === 'start' && (

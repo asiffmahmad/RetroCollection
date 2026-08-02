@@ -224,17 +224,16 @@ export default function Game2048Page({ onBack }: Props) {
       </div>
 
       {/* Board */}
-      <div className="relative rounded-2xl p-2 select-none"
+      <div className="relative rounded-2xl p-2 select-none mx-auto w-full max-w-[400px]"
         style={{
           background: '#0a0a1a', border: `1px solid ${A}33`,
           boxShadow: `0 0 30px ${A}11, 0 4px 24px rgba(0,0,0,0.6)`,
-          width: 4 * CELL_SIZE + 5 * GAP + 16,
-          maxWidth: '100%',
+          aspectRatio: '1/1'
         }}
         onTouchStart={onTS} onTouchEnd={onTE}>
 
         {/* Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: `repeat(4, ${CELL_SIZE}px)`, gap: GAP, padding: GAP / 2 }}>
+        <div className="w-full h-full" style={{ display: 'grid', gridTemplateColumns: `repeat(4, 1fr)`, gap: '2%', padding: '1%' }}>
           {grid.map((row, r) => row.map((val, c) => {
             const key = `${r},${c}`;
             const ts = getTileStyle(val);
@@ -244,7 +243,7 @@ export default function Game2048Page({ onBack }: Props) {
               <div key={key}
                 className={isNew ? 'animate-tile-appear' : isMerged ? 'animate-tile-merge' : ''}
                 style={{
-                  width: CELL_SIZE, height: CELL_SIZE,
+                  width: '100%', height: '100%',
                   background: ts.bg, borderRadius: 8,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontSize: fontSize(val), fontWeight: 900,

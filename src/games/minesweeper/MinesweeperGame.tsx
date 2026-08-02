@@ -254,14 +254,14 @@ export default function MinesweeperGamePage({ onBack }: Props) {
       )}
 
       {/* Game board */}
-      <div className="relative rounded-2xl overflow-hidden p-2" style={{ background: '#080816', border: `1px solid ${A}22`, boxShadow: `0 0 20px ${A}11` }}>
+      <div className="relative rounded-2xl overflow-hidden p-1.5 w-full max-w-[450px]" style={{ background: '#080816', border: `1px solid ${A}22`, boxShadow: `0 0 20px ${A}11` }}>
         {grid.length > 0 && (
-          <div style={{ display: 'grid', gridTemplateColumns: `repeat(${cfg.cols}, ${cfg.cell}px)`, gap: '1px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: `repeat(${cfg.cols}, 1fr)`, gap: '1px', width: '100%', aspectRatio: `${cfg.cols}/${cfg.rows}` }}>
             {grid.map((row, r) => row.map((cell, c) => {
               const cs = cellStyle(cell, r, c);
               return (
                 <div key={`${r},${c}`} className={cs.base}
-                  style={{ width: cfg.cell, height: cfg.cell, borderRadius: 3, ...cs.style }}
+                  style={{ width: '100%', height: '100%', borderRadius: 3, ...cs.style }}
                   onClick={() => handleReveal(r, c)}
                   onContextMenu={(e) => handleFlag(e, r, c)}
                   onTouchStart={() => onTouchStartCell(r, c)}

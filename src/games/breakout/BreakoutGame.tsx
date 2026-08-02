@@ -391,9 +391,9 @@ export default function BreakoutGamePage({ onBack }: Props) {
 
       {/* Canvas */}
       <div className="relative rounded-2xl overflow-hidden w-full cursor-none"
-        style={{ maxWidth: CW, aspectRatio: `${CW}/${CH}`, boxShadow: `0 0 30px ${A}22, 0 4px 24px rgba(0,0,0,0.6)` }}
+        style={{ maxWidth: 450, aspectRatio: `${CW}/${CH}`, boxShadow: `0 0 30px ${A}22, 0 4px 24px rgba(0,0,0,0.6)` }}
         onMouseMove={handleMouseMove} onTouchMove={handleTouchMove} onTouchStart={(e) => { e.preventDefault(); handleTap(); }} onClick={handleTap}>
-        <canvas ref={cvRef} width={CW} height={CH} className="block w-full h-full" />
+        <canvas ref={cvRef} width={CW} height={CH} className="block w-full h-full object-contain" />
         {gs === 'idle' && overlay(<>
           <div className="text-5xl animate-bounce">🏓</div>
           <h2 className="text-3xl font-black tracking-wider" style={{ color: A, fontFamily: '"JetBrains Mono",monospace', textShadow: `0 0 20px ${A}66` }}>BREAKOUT</h2>

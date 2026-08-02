@@ -312,11 +312,11 @@ export default function FlappyGamePage({ onBack }: Props) {
         </div>
       </div>
 
-      {/* Canvas — click/tap to flap */}
-      <div className="relative rounded-2xl overflow-hidden w-full cursor-pointer select-none"
-        style={{ maxWidth: CW, aspectRatio: `${CW}/${CH}`, boxShadow: `0 0 30px ${A}22, 0 4px 24px rgba(0,0,0,0.6)` }}
-        onClick={doFlap} onTouchStart={(e) => { e.preventDefault(); doFlap(); }}>
-        <canvas ref={cvRef} width={CW} height={CH} className="block w-full h-full" />
+      {/* Game Area */}
+      <div className="relative rounded-2xl overflow-hidden w-full max-w-[450px]"
+        style={{ aspectRatio: `${CW}/${CH}`, boxShadow: `0 0 40px #facc1522, 0 4px 24px rgba(0,0,0,0.6)` }}
+        onTouchStart={doFlap} onMouseDown={doFlap}>
+        <canvas ref={cvRef} width={CW} height={CH} className="block w-full h-full object-contain" />
 
         {/* Live score */}
         {gs === 'playing' && (

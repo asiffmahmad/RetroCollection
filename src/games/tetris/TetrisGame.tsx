@@ -428,12 +428,12 @@ export default function TetrisGamePage({ onBack }: Props) {
       </div>
 
       {/* Game area */}
-      <div className="flex gap-2.5 w-full">
+      <div className="flex gap-2 w-full justify-center">
         {/* Canvas */}
-        <div className="relative rounded-2xl overflow-hidden flex-shrink-0"
-          style={{ width: CW, height: CH, boxShadow: `0 0 30px ${A}22, 0 4px 24px rgba(0,0,0,0.6)` }}
+        <div className="relative rounded-2xl overflow-hidden"
+          style={{ width: '68%', maxWidth: CW, aspectRatio: `${CW}/${CH}`, boxShadow: `0 0 30px ${A}22, 0 4px 24px rgba(0,0,0,0.6)` }}
           onTouchStart={onTS} onTouchEnd={onTE}>
-          <canvas ref={cvRef} width={CW} height={CH} className="block" />
+          <canvas ref={cvRef} width={CW} height={CH} className="block w-full h-full object-contain" />
           {gs === 'idle' && overlay(<>
             <div className="text-5xl animate-bounce">🧱</div>
             <h2 className="text-3xl font-black tracking-wider" style={{ color: A, fontFamily: '"JetBrains Mono",monospace', textShadow: `0 0 20px ${A}66` }}>TETRIS</h2>
@@ -461,7 +461,7 @@ export default function TetrisGamePage({ onBack }: Props) {
         </div>
 
         {/* Side panel */}
-        <div className="flex flex-col gap-2 flex-1">
+        <div className="flex flex-col gap-2 flex-1 min-w-0" style={{ maxWidth: 120 }}>
           <div className="rounded-xl p-2.5" style={{ background: '#0f0f2a', border: '1px solid #1a1a3a' }}>
             <div className="text-[9px] uppercase tracking-widest" style={{ color: '#8888aa', fontFamily: '"JetBrains Mono",monospace' }}>Score</div>
             <div className="text-lg font-bold tabular-nums leading-tight" style={{ color: A, fontFamily: '"JetBrains Mono",monospace' }}>{score}</div>
