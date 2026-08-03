@@ -371,21 +371,21 @@ export default function BreakoutGamePage({ onBack }: Props) {
   );
 
   return (
-    <div className="flex flex-col w-full h-[100dvh] sm:h-auto sm:w-auto animate-fade-in mx-auto justify-between" style={{ maxWidth: 450 }}>
+    <div className="flex flex-col items-center w-full h-[100dvh] mx-auto p-2 sm:p-4 gap-2 sm:gap-4" style={{ maxWidth: 450 }}>
       {/* Header */}
-      <div className="flex w-full items-center justify-between p-3 shrink-0">
+      <div className="flex w-full items-center justify-between px-2 shrink-0">
         <div className="flex items-center gap-2">
           <button onClick={onBack} className="flex items-center justify-center w-8 h-8 rounded-xl hover:scale-110 active:scale-95 transition-all"
             style={{ background: '#ffffff08', border: '1px solid #ffffff15' }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8888bb" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
           </button>
-          <span className="text-2xl">🏓</span>
-          <h1 className="text-xl font-bold tracking-wider" style={{ color: A, fontFamily: '"JetBrains Mono",monospace' }}>BREAKOUT</h1>
+          <span className="text-xl sm:text-2xl">🏓</span>
+          <h1 className="text-lg sm:text-xl font-bold tracking-wider" style={{ color: A, fontFamily: '"JetBrains Mono",monospace' }}>BREAKOUT</h1>
         </div>
         <div className="flex items-center gap-2">
           <div className="flex flex-col items-end">
             <span className="text-[9px] uppercase tracking-widest" style={{ color: '#8888aa' }}>Score</span>
-            <span className="text-lg font-bold" style={{ color: A, fontFamily: '"JetBrains Mono",monospace' }}>{score}</span>
+            <span className="text-base sm:text-lg font-bold" style={{ color: A, fontFamily: '"JetBrains Mono",monospace' }}>{score}</span>
           </div>
           {gs === 'playing' && <button onClick={togglePause} className="rounded-lg px-2.5 py-1.5 text-sm hover:scale-105 active:scale-95 transition-all"
             style={{ color: '#8888aa', border: '1px solid #8888aa44', background: '#ffffff08' }}>⏸</button>}
@@ -393,7 +393,7 @@ export default function BreakoutGamePage({ onBack }: Props) {
       </div>
 
       {/* Score bar */}
-      <div className="flex w-full items-center justify-between rounded-xl px-4 py-2" style={{ maxWidth: CW, background: '#0f0f2a', border: `1px solid ${A}33` }}>
+      <div className="flex w-full items-center justify-between rounded-xl px-4 py-2 shrink-0" style={{ background: '#0f0f2a', border: `1px solid ${A}33` }}>
         <div><span className="text-[9px] uppercase tracking-widest" style={{ color: '#8888aa' }}>Best </span><span className="text-sm font-bold" style={{ color: '#ffd700', fontFamily: '"JetBrains Mono",monospace' }}>{best}</span></div>
         <div className="flex items-center gap-1">
           {Array.from({ length: MAX_LIVES }).map((_, i) => (
@@ -403,46 +403,48 @@ export default function BreakoutGamePage({ onBack }: Props) {
         <div><span className="text-[9px] uppercase tracking-widest" style={{ color: '#8888aa' }}>Lives</span></div>
       </div>
 
-      {/* Canvas */}
-      <div className="relative rounded-2xl overflow-hidden w-full cursor-none"
-        style={{ maxWidth: 450, aspectRatio: `${CW}/${CH}`, boxShadow: `0 0 30px ${A}22, 0 4px 24px rgba(0,0,0,0.6)` }}
-        onMouseMove={handleMouseMove} onTouchMove={handleTouchMove} onTouchStart={(e) => { e.preventDefault(); handleTap(); }} onClick={handleTap}>
-        <canvas ref={cvRef} width={CW} height={CH} className="block w-full h-full object-contain" />
-        {gs === 'idle' && overlay(<>
-          <div className="text-5xl animate-bounce">🏓</div>
-          <h2 className="text-3xl font-black tracking-wider" style={{ color: A, fontFamily: '"JetBrains Mono",monospace', textShadow: `0 0 20px ${A}66` }}>BREAKOUT</h2>
-          <button onClick={startGame} className="rounded-2xl px-9 py-3.5 text-base font-bold tracking-wider hover:scale-110 active:scale-95 transition-all"
-            style={{ background: `linear-gradient(135deg, ${A}, #fbbf24)`, color: '#000', boxShadow: `0 0 30px ${A}44` }}>▶ PLAY</button>
-          <p className="text-[11px] text-center" style={{ color: '#8888aa' }}>🖱️ Mouse / 👆 Touch to move paddle</p>
-        </>)}
-        {gs === 'paused' && overlay(<>
-          <div className="text-5xl">⏸️</div>
-          <h2 className="text-3xl font-black" style={{ color: '#e0e0ff', fontFamily: '"JetBrains Mono",monospace' }}>PAUSED</h2>
-          <button onClick={togglePause} className="rounded-2xl px-9 py-3.5 text-base font-bold hover:scale-110 active:scale-95 transition-all"
-            style={{ background: `linear-gradient(135deg, ${A}, #fbbf24)`, color: '#000', boxShadow: `0 0 30px ${A}44` }}>▶ RESUME</button>
-        </>)}
-        {(gs === 'gameover') && overlay(<>
-          <div className="text-5xl">💀</div>
-          <h2 className="text-3xl font-black" style={{ color: '#ff4466', fontFamily: '"JetBrains Mono",monospace', textShadow: '0 0 20px #ff446666' }}>GAME OVER</h2>
-          <div className="rounded-xl px-6 py-3 text-center" style={{ background: '#ffffff08', border: '1px solid #ffffff15' }}>
-            <p className="text-[10px] uppercase tracking-widest" style={{ color: '#8888aa' }}>Score</p>
-            <p className="text-4xl font-black" style={{ color: score >= best && score > 0 ? '#ffd700' : A, fontFamily: '"JetBrains Mono",monospace' }}>{score}</p>
-            {score > 0 && score >= best && <p className="text-xs mt-1" style={{ color: '#ffd700' }}>🎉 NEW BEST!</p>}
-          </div>
-          <button onClick={startGame} className="rounded-2xl px-9 py-3.5 text-base font-bold hover:scale-110 active:scale-95 transition-all"
-            style={{ background: `linear-gradient(135deg, ${A}, #fbbf24)`, color: '#000', boxShadow: `0 0 30px ${A}44` }}>🔄 RESTART</button>
-        </>)}
-        {gs === 'won' && overlay(<>
-          <div className="text-6xl">🎉</div>
-          <h2 className="text-3xl font-black tracking-wider" style={{ color: '#ffd700', fontFamily: '"JetBrains Mono",monospace', textShadow: '0 0 20px #ffd70066' }}>YOU WIN!</h2>
-          <p className="text-2xl font-bold" style={{ color: A, fontFamily: '"JetBrains Mono",monospace' }}>{score} pts</p>
-          <button onClick={startGame} className="rounded-2xl px-9 py-3.5 text-base font-bold hover:scale-110 active:scale-95 transition-all"
-            style={{ background: `linear-gradient(135deg, #ffd700, ${A})`, color: '#000', boxShadow: '0 0 30px #ffd70044' }}>▶ PLAY AGAIN</button>
-        </>)}
+      {/* Canvas Wrapper for scaling */}
+      <div className="flex-1 min-h-0 w-full flex items-center justify-center">
+        <div className="relative rounded-2xl overflow-hidden cursor-none"
+          style={{ aspectRatio: `${CW}/${CH}`, maxHeight: '100%', maxWidth: '100%', boxShadow: `0 0 30px ${A}22, 0 4px 24px rgba(0,0,0,0.6)` }}
+          onMouseMove={handleMouseMove} onTouchMove={handleTouchMove} onTouchStart={(e) => { e.preventDefault(); handleTap(); }} onClick={handleTap}>
+          <canvas ref={cvRef} width={CW} height={CH} className="block w-full h-full object-contain" />
+          {gs === 'idle' && overlay(<>
+            <div className="text-5xl animate-bounce">🏓</div>
+            <h2 className="text-3xl font-black tracking-wider" style={{ color: A, fontFamily: '"JetBrains Mono",monospace', textShadow: `0 0 20px ${A}66` }}>BREAKOUT</h2>
+            <button onClick={startGame} className="rounded-2xl px-9 py-3.5 text-base font-bold tracking-wider hover:scale-110 active:scale-95 transition-all"
+              style={{ background: `linear-gradient(135deg, ${A}, #fbbf24)`, color: '#000', boxShadow: `0 0 30px ${A}44` }}>▶ PLAY</button>
+            <p className="text-[11px] text-center" style={{ color: '#8888aa' }}>🖱️ Mouse / 👆 Touch to move paddle</p>
+          </>)}
+          {gs === 'paused' && overlay(<>
+            <div className="text-5xl">⏸️</div>
+            <h2 className="text-3xl font-black" style={{ color: '#e0e0ff', fontFamily: '"JetBrains Mono",monospace' }}>PAUSED</h2>
+            <button onClick={togglePause} className="rounded-2xl px-9 py-3.5 text-base font-bold hover:scale-110 active:scale-95 transition-all"
+              style={{ background: `linear-gradient(135deg, ${A}, #fbbf24)`, color: '#000', boxShadow: `0 0 30px ${A}44` }}>▶ RESUME</button>
+          </>)}
+          {(gs === 'gameover') && overlay(<>
+            <div className="text-5xl">💀</div>
+            <h2 className="text-3xl font-black" style={{ color: '#ff4466', fontFamily: '"JetBrains Mono",monospace', textShadow: '0 0 20px #ff446666' }}>GAME OVER</h2>
+            <div className="rounded-xl px-6 py-3 text-center" style={{ background: '#ffffff08', border: '1px solid #ffffff15' }}>
+              <p className="text-[10px] uppercase tracking-widest" style={{ color: '#8888aa' }}>Score</p>
+              <p className="text-4xl font-black" style={{ color: score >= best && score > 0 ? '#ffd700' : A, fontFamily: '"JetBrains Mono",monospace' }}>{score}</p>
+              {score > 0 && score >= best && <p className="text-xs mt-1" style={{ color: '#ffd700' }}>🎉 NEW BEST!</p>}
+            </div>
+            <button onClick={startGame} className="rounded-2xl px-9 py-3.5 text-base font-bold hover:scale-110 active:scale-95 transition-all"
+              style={{ background: `linear-gradient(135deg, ${A}, #fbbf24)`, color: '#000', boxShadow: `0 0 30px ${A}44` }}>🔄 RESTART</button>
+          </>)}
+          {gs === 'won' && overlay(<>
+            <div className="text-6xl">🎉</div>
+            <h2 className="text-3xl font-black tracking-wider" style={{ color: '#ffd700', fontFamily: '"JetBrains Mono",monospace', textShadow: '0 0 20px #ffd70066' }}>YOU WIN!</h2>
+            <p className="text-2xl font-bold" style={{ color: A, fontFamily: '"JetBrains Mono",monospace' }}>{score} pts</p>
+            <button onClick={startGame} className="rounded-2xl px-9 py-3.5 text-base font-bold hover:scale-110 active:scale-95 transition-all"
+              style={{ background: `linear-gradient(135deg, #ffd700, ${A})`, color: '#000', boxShadow: '0 0 30px #ffd70044' }}>▶ PLAY AGAIN</button>
+          </>)}
+        </div>
       </div>
 
-      <div className="p-3 shrink-0 text-center text-[10px]" style={{ color: '#555580' }}>
-        🖱️ Move mouse over canvas · 📱 Touch and drag paddle · W=wide paddle · S=slow ball
+      <div className="p-2 shrink-0 text-center text-[10px]" style={{ color: '#555580' }}>
+        🖱️ Move mouse · 📱 Touch & drag · W=wide · S=slow
       </div>
     </div>
   );
