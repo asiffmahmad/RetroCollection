@@ -219,8 +219,14 @@ export default function RacerGame({ onBack }: RacerGameProps) {
             onMouseDown={handleLeftStart}
             onMouseUp={handleLeftEnd}
             onMouseLeave={handleLeftEnd}
-            className="w-[65px] h-[65px] flex items-center justify-center rounded-xl text-3xl font-bold select-none active:scale-90 transition-transform shadow-lg"
-            style={{ background: 'rgba(255,255,255,0.1)', border: `2px solid rgba(255,255,255,0.3)`, color: '#fff', touchAction: 'none' }}
+            className="w-[65px] h-[65px] flex items-center justify-center rounded-xl text-3xl font-bold select-none active:translate-y-1 transition-transform"
+            style={{ 
+              background: 'rgba(255,255,255,0.1)', 
+              border: `2px solid rgba(255,255,255,0.3)`, 
+              borderBottomWidth: '6px',
+              color: '#fff', 
+              touchAction: 'none' 
+            }}
           >
             ←
           </button>
@@ -231,8 +237,14 @@ export default function RacerGame({ onBack }: RacerGameProps) {
             onMouseDown={handleRightStart}
             onMouseUp={handleRightEnd}
             onMouseLeave={handleRightEnd}
-            className="w-[65px] h-[65px] flex items-center justify-center rounded-xl text-3xl font-bold select-none active:scale-90 transition-transform shadow-lg"
-            style={{ background: 'rgba(255,255,255,0.1)', border: `2px solid rgba(255,255,255,0.3)`, color: '#fff', touchAction: 'none' }}
+            className="w-[65px] h-[65px] flex items-center justify-center rounded-xl text-3xl font-bold select-none active:translate-y-1 transition-transform"
+            style={{ 
+              background: 'rgba(255,255,255,0.1)', 
+              border: `2px solid rgba(255,255,255,0.3)`, 
+              borderBottomWidth: '6px',
+              color: '#fff', 
+              touchAction: 'none' 
+            }}
           >
             →
           </button>
@@ -244,8 +256,14 @@ export default function RacerGame({ onBack }: RacerGameProps) {
             onMouseDown={handleBrakeStart}
             onMouseUp={handleBrakeEnd}
             onMouseLeave={handleBrakeEnd}
-            className="w-[65px] h-[65px] rounded-full flex items-center justify-center text-lg font-bold select-none active:scale-90 transition-transform shadow-lg mt-4"
-            style={{ background: 'rgba(255, 51, 102, 0.2)', border: `3px solid #ff3366`, color: '#ff3366', touchAction: 'none' }}
+            className="w-[65px] h-[65px] rounded-xl flex items-center justify-center text-lg font-bold select-none active:translate-y-1 transition-transform mt-4"
+            style={{ 
+              background: 'rgba(255, 51, 102, 0.2)', 
+              border: `2px solid #ff3366`, 
+              borderBottomWidth: '6px',
+              color: '#ff3366', 
+              touchAction: 'none' 
+            }}
           >
             BRK
           </button>
@@ -256,8 +274,14 @@ export default function RacerGame({ onBack }: RacerGameProps) {
             onMouseDown={handleGasStart}
             onMouseUp={handleGasEnd}
             onMouseLeave={handleGasEnd}
-            className="w-[85px] h-[85px] rounded-full flex items-center justify-center text-xl font-bold select-none active:scale-90 transition-transform shadow-lg"
-            style={{ background: 'rgba(0, 204, 255, 0.2)', border: `3px solid #00ccff`, color: '#00ccff', touchAction: 'none' }}
+            className="w-[85px] h-[85px] rounded-xl flex items-center justify-center text-xl font-bold select-none active:translate-y-1 transition-transform"
+            style={{ 
+              background: 'rgba(0, 204, 255, 0.2)', 
+              border: `2px solid #00ccff`, 
+              borderBottomWidth: '8px',
+              color: '#00ccff', 
+              touchAction: 'none' 
+            }}
           >
             GAS
           </button>
