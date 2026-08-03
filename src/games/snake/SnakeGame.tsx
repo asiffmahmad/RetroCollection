@@ -3,6 +3,7 @@ import { SnakeGame, GameState } from '../../game/engine';
 import { CANVAS_SIZE, Direction, COLORS } from '../../game/constants';
 import { getHighScores, saveHighScore, getTopScore, HighScoreEntry } from '../../game/highscores';
 import { HAPTIC, SFX, resumeAudio } from '../../utils/feedback';
+import VirtualJoystick, { JoystickDirection } from '../../components/VirtualJoystick';
 
 interface SnakeGamePageProps {
   onBack: () => void;
@@ -113,6 +114,20 @@ export default function SnakeGamePage({ onBack }: SnakeGamePageProps) {
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
   }, [startGame, onBack]);
+
+  const handleJoystickMove = useCallback((dx: number, dy: number, dir: JoystickDirection) => {
+    if (!dir) return;
+    const game = gameRef.current;
+    if (!game) return;
+    const state = game.getState();
+    if (state === 'playing') {
+      const currentDir = game.getDirection();
+      if (currentDir !== dir) {
+        game.setDirection(dir);
+        SFX.snakeMove();
+      }
+    }
+  }, []);
 
   // Touch / Swipe on the canvas container
   useEffect(() => {
@@ -397,26 +412,14 @@ export default function SnakeGamePage({ onBack }: SnakeGamePageProps) {
         )}
       </div>
 
-      {/* ── Mobile D-Pad ── */}
-      <div className="grid grid-cols-3 gap-2 md:hidden" style={{ width: '100%', maxWidth: 220 }}>
-        {/* Row 1: Up */}
-        <div />
-        <button
-          onTouchStart={(e) => { e.preventDefault(); resumeAudio(); HAPTIC.direction(); SFX.snakeMove(); gameRef.current?.setDirection('UP'); }}
-          className="flex items-center justify-center rounded-2xl text-2xl active:scale-90 transition-transform select-none"
-          style={{ background: '#ffffff0f', border: `2px solid ${COLORS.accentDim}`, color: COLORS.accent, height: 60, touchAction: 'none' }}
-        >
-          ↑
-        </button>
-        <div />
-        {/* Row 2: Left, Center, Right */}
-        <button
-          onTouchStart={(e) => { e.preventDefault(); resumeAudio(); HAPTIC.direction(); SFX.snakeMove(); gameRef.current?.setDirection('LEFT'); }}
-          className="flex items-center justify-center rounded-2xl text-2xl active:scale-90 transition-transform select-none"
-          style={{ background: '#ffffff0f', border: `2px solid ${COLORS.accentDim}`, color: COLORS.accent, height: 60, touchAction: 'none' }}
-        >
-          ←
-        </button>
+      {/* ── Mobile Controls ── */}
+      <div className="flex md:hidden items-center justify-between px-6 pb-6 w-full shrink-0" style={{ maxWidth: CANVAS_SIZE }}>
+        <VirtualJoystick 
+          onMove={handleJoystickMove} 
+          onEnd={() => {}} 
+          size={130} 
+          stickColor={COLORS.accent} 
+        />
         <button
           onTouchStart={(e) => {
             e.preventDefault(); resumeAudio(); HAPTIC.soft();
@@ -426,28 +429,11 @@ export default function SnakeGamePage({ onBack }: SnakeGamePageProps) {
             if (s === 'start' || s === 'gameover') startGame();
             else if (s === 'playing' || s === 'paused') game.togglePause();
           }}
-          className="flex items-center justify-center rounded-2xl text-lg font-bold active:scale-90 transition-transform select-none"
-          style={{ background: '#ffffff0f', border: `2px solid ${COLORS.accentDim}`, color: COLORS.textDim, height: 60, touchAction: 'none' }}
+          className="flex items-center justify-center rounded-full text-2xl font-bold active:scale-90 transition-transform select-none shadow-lg"
+          style={{ width: 80, height: 80, background: '#ffffff0f', border: `3px solid ${COLORS.accentDim}`, color: COLORS.textDim, touchAction: 'none' }}
         >
           ⏸
         </button>
-        <button
-          onTouchStart={(e) => { e.preventDefault(); resumeAudio(); HAPTIC.direction(); SFX.snakeMove(); gameRef.current?.setDirection('RIGHT'); }}
-          className="flex items-center justify-center rounded-2xl text-2xl active:scale-90 transition-transform select-none"
-          style={{ background: '#ffffff0f', border: `2px solid ${COLORS.accentDim}`, color: COLORS.accent, height: 60, touchAction: 'none' }}
-        >
-          →
-        </button>
-        {/* Row 3: Down */}
-        <div />
-        <button
-          onTouchStart={(e) => { e.preventDefault(); resumeAudio(); HAPTIC.direction(); SFX.snakeMove(); gameRef.current?.setDirection('DOWN'); }}
-          className="flex items-center justify-center rounded-2xl text-2xl active:scale-90 transition-transform select-none"
-          style={{ background: '#ffffff0f', border: `2px solid ${COLORS.accentDim}`, color: COLORS.accent, height: 60, touchAction: 'none' }}
-        >
-          ↓
-        </button>
-        <div />
       </div>
 
       {/* ── High Scores Panel ── */}

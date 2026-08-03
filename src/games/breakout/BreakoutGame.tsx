@@ -53,7 +53,8 @@ class BreakoutEngine {
   private paddle = { x: CW / 2, w: 75, targetX: CW / 2 };
   private lives = MAX_LIVES; private score = 0;
   private state: BState = 'idle';
-  private particles: Particle[] = [];
+  private particles: Particle[] = Array.from({ length: 200 }, () => ({ x: 0, y: 0, vx: 0, vy: 0, life: 0, ml: 0, color: '', size: 0 }));
+  private pIdx = 0;
   private powerups: PowerUp[] = [];
   private wideTimer = 0; private slowTimer = 0;
   private prevTime = 0; private dt = 0;
@@ -68,7 +69,8 @@ class BreakoutEngine {
 
   start() {
     this.score = 0; this.lives = MAX_LIVES;
-    this.wideTimer = 0; this.slowTimer = 0; this.particles = []; this.powerups = [];
+    this.wideTimer = 0; this.slowTimer = 0; this.powerups = [];
+    for (const p of this.particles) p.life = 0;
     this.paddle = { x: CW / 2, w: 75, targetX: CW / 2 };
     this.cbs.onScore(0); this.cbs.onLives(MAX_LIVES);
     this.buildBricks(); this.spawnBall();
@@ -106,7 +108,10 @@ class BreakoutEngine {
   private burst(x: number, y: number, color: string, n = 12) {
     for (let i = 0; i < n; i++) {
       const angle = Math.random() * Math.PI * 2; const spd = 2 + Math.random() * 5;
-      this.particles.push({ x, y, vx: Math.cos(angle) * spd, vy: Math.sin(angle) * spd - 1, life: 35 + Math.random() * 25, ml: 60, color, size: 2 + Math.random() * 3 });
+      const p = this.particles[this.pIdx];
+      p.x = x; p.y = y; p.vx = Math.cos(angle) * spd; p.vy = Math.sin(angle) * spd - 1;
+      p.life = 35 + Math.random() * 25; p.ml = 60; p.color = color; p.size = 2 + Math.random() * 3;
+      this.pIdx = (this.pIdx + 1) % this.particles.length;
     }
   }
 
@@ -125,8 +130,11 @@ class BreakoutEngine {
     this.paddle.x = Math.max(this.paddle.w / 2, Math.min(CW - this.paddle.w / 2, this.paddle.x));
 
     // Particles
-    this.particles = this.particles.filter(p => p.life > 0);
-    for (const p of this.particles) { p.x += p.vx; p.y += p.vy; p.vy += 0.12; p.life--; }
+    for (const p of this.particles) { 
+      if (p.life > 0) {
+        p.x += p.vx; p.y += p.vy; p.vy += 0.12; p.life--; 
+      }
+    }
 
     // Power-ups
     this.powerups = this.powerups.filter(pu => pu.y < CH + 20);

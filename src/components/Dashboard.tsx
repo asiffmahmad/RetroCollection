@@ -254,6 +254,15 @@ export default function Dashboard({ onSelectGame }: DashboardProps) {
   const topScore = getTopScore();
   const gamesPlayed = getTotalGamesPlayed();
   const playableCount = GAMES.filter((g) => g.status === 'playable').length;
+  
+  const [showSettings, setShowSettings] = useState(false);
+  const [crtEnabled, setCrtEnabled] = useState(false);
+
+  useEffect(() => {
+    const isCrt = localStorage.getItem('retro_settings_crt') === 'true';
+    setCrtEnabled(isCrt);
+    if (isCrt) document.body.classList.add('crt-effect');
+  }, []);
 
   return (
     <div
@@ -266,7 +275,14 @@ export default function Dashboard({ onSelectGame }: DashboardProps) {
 
       <div className="relative z-10 w-full max-w-4xl mx-auto px-3 sm:px-4 py-6 sm:py-8 md:py-12">
         {/* Hero */}
-        <div className="text-center mb-7 sm:mb-10 md:mb-14 animate-fade-in">
+        <div className="relative text-center mb-7 sm:mb-10 md:mb-14 animate-fade-in">
+          <button
+            onClick={() => setShowSettings(true)}
+            className="absolute right-0 top-0 w-10 h-10 flex items-center justify-center rounded-xl transition-all hover:scale-110 active:scale-95"
+            style={{ background: '#ffffff08', border: `1px solid ${THEME.border}`, color: THEME.textDim }}
+          >
+            ⚙️
+          </button>
           <div className="flex items-center justify-center mb-3 sm:mb-4">
             <div
               className="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 rounded-2xl text-2xl sm:text-3xl"
@@ -342,6 +358,40 @@ export default function Dashboard({ onSelectGame }: DashboardProps) {
           </p>
         </div>
       </div>
+
+      {/* Settings Modal */}
+      {showSettings && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: '#050510cc', backdropFilter: 'blur(8px)' }}>
+          <div className="w-full max-w-sm rounded-2xl p-6 animate-fade-in" style={{ background: '#0f0f2a', border: `1px solid ${THEME.border}` }}>
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold tracking-wider" style={{ color: THEME.textPrimary, fontFamily: THEME.fontMono }}>SETTINGS</h2>
+              <button onClick={() => setShowSettings(false)} className="text-xl hover:scale-110 transition-transform" style={{ color: THEME.textDim }}>✕</button>
+            </div>
+            
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="text-sm font-bold" style={{ color: THEME.textPrimary }}>CRT Scanline Effect</div>
+                  <div className="text-xs" style={{ color: THEME.textDim }}>Retro TV overlay across all games</div>
+                </div>
+                <button
+                  onClick={() => {
+                    const next = !crtEnabled;
+                    setCrtEnabled(next);
+                    localStorage.setItem('retro_settings_crt', String(next));
+                    if (next) document.body.classList.add('crt-effect');
+                    else document.body.classList.remove('crt-effect');
+                  }}
+                  className="w-12 h-6 rounded-full relative transition-colors"
+                  style={{ background: crtEnabled ? THEME.accent : '#ffffff15' }}
+                >
+                  <div className="absolute top-1 left-1 w-4 h-4 rounded-full bg-white transition-transform" style={{ transform: crtEnabled ? 'translateX(24px)' : 'translateX(0)' }} />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

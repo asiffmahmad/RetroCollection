@@ -119,5 +119,16 @@ export const GAMES: GameMeta[] = [
     status: 'playable',
     bestScoreKey: 'game2048_best',
   },
+  {
+    id: 'bomberman',
+    title: 'Bomberman',
+    emoji: '🧨',
+    description: 'Place bombs and blast through walls and enemies in this classic explosive arcade game.',
+    color: '#ff3366',
+    colorGlow: '#ff336644',
+    tags: ['Arcade', 'Action', 'Puzzle'],
+    status: 'playable',
+    bestScoreKey: 'bomberman_best',
+  },
 ];
 
