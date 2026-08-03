@@ -56,7 +56,7 @@ export default function App() {
     if (screen.type === 'game') {
       const wrap = (child: React.ReactNode) => (
         <div className="game-scroll-container" style={{ background: BG_DARK }}>
-          <div className="flex min-h-full items-center justify-center py-4">
+          <div className="flex min-h-[100dvh] items-center justify-center p-0 sm:py-4">
             {child}
           </div>
         </div>

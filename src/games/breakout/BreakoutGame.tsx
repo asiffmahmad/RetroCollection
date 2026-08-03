@@ -6,7 +6,13 @@ import * as _FB from '../../utils/feedback';
 const _SFX = _FB.SFX;
 
 // ── Constants ─────────────────────────────────────────────────
-const CW = 320, CH = 500;
+const CW = 320;
+const getCH = () => {
+  if (typeof window === 'undefined') return 500;
+  const ratio = window.innerHeight / window.innerWidth;
+  return Math.floor(Math.max(450, Math.min(750, CW * ratio * 0.9))); // 0.9 to account for UI headers
+};
+const CH = getCH();
 const PADDLE_H = 10, PADDLE_Y = CH - 40;
 const BALL_R = 7;
 const BRICK_COLS = 10, BRICK_ROWS = 7;
@@ -350,16 +356,16 @@ export default function BreakoutGamePage({ onBack }: Props) {
     else if (s === 'playing' || s === 'paused') togglePause();
   };
 
-  const A = '#f59e0b';
+  const A = '#8b5cf6';
   const overlay = (children: React.ReactNode) => (
     <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 px-4"
       style={{ background: '#050510dd', backdropFilter: 'blur(6px)' }}>{children}</div>
   );
 
   return (
-    <div className="flex flex-col items-center gap-3 p-3 w-full max-w-[420px] mx-auto animate-fade-in">
+    <div className="flex flex-col w-full h-[100dvh] sm:h-auto sm:w-auto animate-fade-in mx-auto justify-between" style={{ maxWidth: 450 }}>
       {/* Header */}
-      <div className="flex w-full items-center justify-between" style={{ maxWidth: CW }}>
+      <div className="flex w-full items-center justify-between p-3 shrink-0">
         <div className="flex items-center gap-2">
           <button onClick={onBack} className="flex items-center justify-center w-8 h-8 rounded-xl hover:scale-110 active:scale-95 transition-all"
             style={{ background: '#ffffff08', border: '1px solid #ffffff15' }}>
@@ -427,9 +433,9 @@ export default function BreakoutGamePage({ onBack }: Props) {
         </>)}
       </div>
 
-      <p className="text-[10px]" style={{ color: '#555580' }}>
+      <div className="p-3 shrink-0 text-center text-[10px]" style={{ color: '#555580' }}>
         🖱️ Move mouse over canvas · 📱 Touch and drag paddle · W=wide paddle · S=slow ball
-      </p>
+      </div>
     </div>
   );
 }

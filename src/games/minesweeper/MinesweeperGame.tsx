@@ -200,28 +200,29 @@ export default function MinesweeperGamePage({ onBack }: Props) {
   };
 
   return (
-    <div className="flex flex-col items-center gap-3 p-3 w-full mx-auto animate-fade-in" style={{ maxWidth: Math.min(cfg.cols * cfg.cell + 32, 420) }}>
-      {/* Header */}
-      <div className="flex w-full items-center justify-between">
-        <div className="flex items-center gap-2">
-          <button onClick={onBack} className="flex items-center justify-center w-8 h-8 rounded-xl hover:scale-110 active:scale-95 transition-all"
-            style={{ background: '#ffffff08', border: '1px solid #ffffff15' }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8888bb" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-          </button>
-          <span className="text-2xl">💣</span>
-          <h1 className="text-xl font-bold tracking-wider" style={{ color: A, fontFamily: '"JetBrains Mono",monospace' }}>MINES</h1>
-        </div>
-        {/* Difficulty tabs */}
-        <div className="flex gap-1">
-          {(['easy','medium','hard'] as Difficulty[]).map(d => (
-            <button key={d} onClick={() => setDiff(d)}
-              className="px-2 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all hover:scale-105 active:scale-95"
-              style={{ background: diff === d ? `${A}33` : '#ffffff08', color: diff === d ? A : '#8888aa', border: `1px solid ${diff === d ? A + '55' : '#ffffff15'}` }}>
-              {d.slice(0, 3)}
+    <div className="flex flex-col w-full h-[100dvh] sm:h-auto sm:w-auto animate-fade-in mx-auto justify-between p-3" style={{ maxWidth: 500 }}>
+      <div className="flex flex-col w-full gap-3 shrink-0">
+        {/* Header */}
+        <div className="flex w-full items-center justify-between">
+          <div className="flex items-center gap-2">
+            <button onClick={onBack} className="flex items-center justify-center w-8 h-8 rounded-xl hover:scale-110 active:scale-95 transition-all"
+              style={{ background: '#ffffff08', border: '1px solid #ffffff15' }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8888bb" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
             </button>
-          ))}
+            <span className="text-2xl">💣</span>
+            <h1 className="text-xl font-bold tracking-wider" style={{ color: A, fontFamily: '"JetBrains Mono",monospace' }}>MINES</h1>
+          </div>
+          {/* Difficulty tabs */}
+          <div className="flex gap-1">
+            {(['easy','medium','hard'] as Difficulty[]).map(d => (
+              <button key={d} onClick={() => setDiff(d)}
+                className="px-2 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all hover:scale-105 active:scale-95"
+                style={{ background: diff === d ? `${A}33` : '#ffffff08', color: diff === d ? A : '#8888aa', border: `1px solid ${diff === d ? A + '55' : '#ffffff15'}` }}>
+                {d.slice(0, 3)}
+              </button>
+            ))}
+          </div>
         </div>
-      </div>
 
       {/* HUD */}
       <div className="flex w-full items-center justify-between rounded-xl px-4 py-2.5" style={{ background: '#0f0f2a', border: `1px solid ${A}33` }}>
@@ -241,17 +242,18 @@ export default function MinesweeperGamePage({ onBack }: Props) {
         </div>
       </div>
 
-      {/* Best times */}
-      {Object.keys(best).length > 0 && (
-        <div className="flex gap-3 w-full text-center">
-          {(['easy','medium','hard'] as Difficulty[]).map(d => best[d] ? (
-            <div key={d} className="flex-1 rounded-lg py-1" style={{ background: '#ffffff05', border: '1px solid #1a1a3a' }}>
-              <div className="text-[8px] uppercase tracking-widest" style={{ color: '#555580' }}>{d.slice(0,3)}</div>
-              <div className="text-xs font-bold" style={{ color: '#ffd700', fontFamily: '"JetBrains Mono",monospace' }}>{best[d]}s</div>
-            </div>
-          ) : null)}
-        </div>
-      )}
+        {/* Best times */}
+        {Object.keys(best).length > 0 && (
+          <div className="flex gap-3 w-full text-center">
+            {(['easy','medium','hard'] as Difficulty[]).map(d => best[d] ? (
+              <div key={d} className="flex-1 rounded-lg py-1" style={{ background: '#ffffff05', border: '1px solid #1a1a3a' }}>
+                <div className="text-[8px] uppercase tracking-widest" style={{ color: '#555580' }}>{d.slice(0,3)}</div>
+                <div className="text-xs font-bold" style={{ color: '#ffd700', fontFamily: '"JetBrains Mono",monospace' }}>{best[d]}s</div>
+              </div>
+            ) : null)}
+          </div>
+        )}
+      </div>
 
       {/* Game board */}
       <div className="relative rounded-2xl overflow-hidden p-1.5 w-full max-w-[450px]" style={{ background: '#080816', border: `1px solid ${A}22`, boxShadow: `0 0 20px ${A}11` }}>
