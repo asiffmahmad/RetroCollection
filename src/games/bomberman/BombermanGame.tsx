@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { BombermanEngine, GameState, COLORS, Direction } from './BombermanEngine';
 import { HAPTIC, SFX, resumeAudio } from '../../utils/feedback';
-import VirtualJoystick, { JoystickDirection } from '../../components/VirtualJoystick';
+import DPad, { DPadDirection } from '../../components/DPad';
 import { THEME } from '../../theme';
 
 interface BombermanGameProps {
@@ -91,19 +91,25 @@ export default function BombermanGame({ onBack }: BombermanGameProps) {
     };
   }, [startGame, onBack]);
 
-  const handleJoystickMove = useCallback((dx: number, dy: number, dir: JoystickDirection) => {
+  const handleDPadMove = useCallback((dir: DPadDirection) => {
     resumeAudio();
-    activeKeys.current['UP'] = dir === 'UP';
-    activeKeys.current['DOWN'] = dir === 'DOWN';
-    activeKeys.current['LEFT'] = dir === 'LEFT';
-    activeKeys.current['RIGHT'] = dir === 'RIGHT';
+    const engine = engineRef.current;
+    if (!engine || engine.getState() !== 'playing') return;
+    
+    if (dir === 'UP') engine.keyUp = true;
+    else if (dir === 'DOWN') engine.keyDown = true;
+    else if (dir === 'LEFT') engine.keyLeft = true;
+    else if (dir === 'RIGHT') engine.keyRight = true;
   }, []);
 
-  const handleJoystickEnd = useCallback(() => {
-    activeKeys.current['UP'] = false;
-    activeKeys.current['DOWN'] = false;
-    activeKeys.current['LEFT'] = false;
-    activeKeys.current['RIGHT'] = false;
+  const handleDPadEnd = useCallback((dir: DPadDirection) => {
+    const engine = engineRef.current;
+    if (!engine) return;
+    
+    if (dir === 'UP') engine.keyUp = false;
+    else if (dir === 'DOWN') engine.keyDown = false;
+    else if (dir === 'LEFT') engine.keyLeft = false;
+    else if (dir === 'RIGHT') engine.keyRight = false;
   }, []);
 
   const handleBombTap = useCallback((e: React.TouchEvent | React.MouseEvent) => {
@@ -181,18 +187,18 @@ export default function BombermanGame({ onBack }: BombermanGameProps) {
       </div>
 
       {/* Mobile Controls */}
-      <div className="flex md:hidden items-center justify-between px-6 pb-8 pt-4 shrink-0">
-        <VirtualJoystick 
-          onMove={handleJoystickMove} 
-          onEnd={handleJoystickEnd} 
-          size={120} 
-          stickColor={COLORS.player} 
-        />
+      <div className="flex md:hidden items-end justify-between px-6 pb-6 pt-4 shrink-0 pointer-events-none">
+        <DPad onDirectionStart={handleDPadMove} onDirectionEnd={handleDPadEnd} size={55} />
         <button
           onTouchStart={handleBombTap}
           onMouseDown={handleBombTap}
-          className="w-[100px] h-[100px] rounded-full flex items-center justify-center text-4xl select-none active:scale-90 transition-transform shadow-lg"
-          style={{ background: 'rgba(255, 51, 102, 0.2)', border: `3px solid ${COLORS.enemy}`, touchAction: 'none' }}
+          className="w-[80px] h-[80px] rounded-xl flex items-center justify-center text-4xl select-none active:translate-y-1 transition-transform mb-2 pointer-events-auto"
+          style={{ 
+            background: 'rgba(255, 51, 102, 0.2)', 
+            border: `2px solid ${COLORS.enemy}`, 
+            borderBottomWidth: '6px',
+            touchAction: 'none' 
+          }}
         >
           💣
         </button>

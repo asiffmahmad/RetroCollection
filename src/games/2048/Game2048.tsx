@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { HAPTIC, SFX, resumeAudio } from '../../utils/feedback';
+import DPad from '../../components/DPad';
 
 // ── Types & constants ──────────────────────────────────────────
 type Grid = (number | null)[][];
@@ -295,21 +296,13 @@ export default function Game2048Page({ onBack }: Props) {
       </div>
 
       {/* Arrow controls for mobile */}
-      <div className="grid grid-cols-3 gap-2 mt-1 md:hidden" style={{ width: 180 }}>
-        <div />
-        <button onTouchStart={(e) => { e.preventDefault(); resumeAudio(); HAPTIC.direction(); doMove('up'); }}
-          className="flex items-center justify-center rounded-2xl text-2xl active:scale-90 transition-transform select-none"
-          style={{ background: '#ffffff0f', border: `2px solid ${A}33`, color: A, height: 60, touchAction: 'none' }}>↑</button>
-        <div />
-        <button onTouchStart={(e) => { e.preventDefault(); resumeAudio(); HAPTIC.direction(); doMove('left'); }}
-          className="flex items-center justify-center rounded-2xl text-2xl active:scale-90 transition-transform select-none"
-          style={{ background: '#ffffff0f', border: `2px solid ${A}33`, color: A, height: 60, touchAction: 'none' }}>←</button>
-        <button onTouchStart={(e) => { e.preventDefault(); resumeAudio(); HAPTIC.direction(); doMove('down'); }}
-          className="flex items-center justify-center rounded-2xl text-2xl active:scale-90 transition-transform select-none"
-          style={{ background: '#ffffff0f', border: `2px solid ${A}33`, color: A, height: 60, touchAction: 'none' }}>↓</button>
-        <button onTouchStart={(e) => { e.preventDefault(); resumeAudio(); HAPTIC.direction(); doMove('right'); }}
-          className="flex items-center justify-center rounded-2xl text-2xl active:scale-90 transition-transform select-none"
-          style={{ background: '#ffffff0f', border: `2px solid ${A}33`, color: A, height: 60, touchAction: 'none' }}>→</button>
+      <div className="flex justify-center mt-4 md:hidden w-full">
+        <DPad onDirectionStart={(dir) => {
+          if (dir === 'UP') doMove('up');
+          if (dir === 'DOWN') doMove('down');
+          if (dir === 'LEFT') doMove('left');
+          if (dir === 'RIGHT') doMove('right');
+        }} size={60} />
       </div>
 
       <p className="text-[10px]" style={{ color: '#555580' }}>

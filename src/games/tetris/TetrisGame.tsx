@@ -316,6 +316,7 @@ class TetrisEngine {
 
 // ── React component ────────────────────────────────────────────
 import { HAPTIC, SFX, resumeAudio } from '../../utils/feedback';
+import DPad from '../../components/DPad';
 interface Props { onBack: () => void; }
 
 export default function TetrisGamePage({ onBack }: Props) {
@@ -398,8 +399,8 @@ export default function TetrisGamePage({ onBack }: Props) {
   const A = '#3b82f6';
   const mBtn = (label: string, fn: () => void, h = 56, accent = false) => (
     <button onTouchStart={(e) => { e.preventDefault(); resumeAudio(); HAPTIC.direction(); fn(); }}
-      className="flex items-center justify-center rounded-2xl text-xl font-bold active:scale-90 transition-transform select-none"
-      style={{ background: accent ? `${A}22` : '#ffffff0f', border: `2px solid ${A}${accent ? '66' : '22'}`, color: A, height: h, touchAction: 'none' }}>
+      className="flex items-center justify-center rounded-xl text-lg font-bold active:translate-y-1 transition-transform select-none"
+      style={{ width: h, height: h, background: accent ? `${A}33` : 'rgba(255,255,255,0.1)', border: `2px solid ${A}${accent ? '88' : '44'}`, borderBottomWidth: '6px', color: '#fff', touchAction: 'none' }}>
       {label}
     </button>
   );
@@ -485,19 +486,20 @@ export default function TetrisGamePage({ onBack }: Props) {
         </div>
       </div>
 
-      {/* Mobile controls — large touch targets */}
-      <div className="w-full grid grid-cols-5 gap-2 md:hidden">
-        {mBtn('🤝', () => { engRef.current?.holdPiece(); SFX.tetHold(); })}
-        {mBtn('←', () => { engRef.current?.moveLeft(); SFX.tetMove(); })}
-        {mBtn('↺', () => { engRef.current?.rotate(1); SFX.tetRotate(); })}
-        {mBtn('→', () => { engRef.current?.moveRight(); SFX.tetMove(); })}
-        {mBtn('⬇', () => { engRef.current?.hardDrop(); SFX.tetDrop(); HAPTIC.medium(); }, 56, true)}
+      {/* Mobile controls */}
+      <div className="w-full flex justify-between items-end md:hidden mt-2 pointer-events-none">
+        <DPad onDirectionStart={(dir) => {
+          if (dir === 'UP') { engRef.current?.rotate(1); SFX.tetRotate(); }
+          if (dir === 'DOWN') { engRef.current?.moveDown(); }
+          if (dir === 'LEFT') { engRef.current?.moveLeft(); SFX.tetMove(); }
+          if (dir === 'RIGHT') { engRef.current?.moveRight(); SFX.tetMove(); }
+        }} size={55} />
+        
+        <div className="flex gap-2 pointer-events-auto mb-2">
+          {mBtn('C', () => { engRef.current?.holdPiece(); SFX.tetHold(); }, 65, false)}
+          {mBtn('X', () => { engRef.current?.hardDrop(); SFX.tetDrop(); HAPTIC.medium(); }, 65, true)}
+        </div>
       </div>
-      <button className="w-full rounded-2xl text-sm font-medium md:hidden active:scale-95 transition-transform select-none"
-        style={{ background: '#ffffff08', border: '1px solid #ffffff15', color: '#8888aa', height: 44, touchAction: 'none' }}
-        onTouchStart={(e) => { e.preventDefault(); resumeAudio(); HAPTIC.tap(); engRef.current?.moveDown(); }}>
-        ↓ Soft Drop
-      </button>
     </div>
   );
 }

@@ -3,7 +3,7 @@ import { SnakeGame, GameState } from '../../game/engine';
 import { CANVAS_SIZE, Direction, COLORS } from '../../game/constants';
 import { getHighScores, saveHighScore, getTopScore, HighScoreEntry } from '../../game/highscores';
 import { HAPTIC, SFX, resumeAudio } from '../../utils/feedback';
-import VirtualJoystick, { JoystickDirection } from '../../components/VirtualJoystick';
+import DPad, { DPadDirection } from '../../components/DPad';
 
 interface SnakeGamePageProps {
   onBack: () => void;
@@ -115,18 +115,16 @@ export default function SnakeGamePage({ onBack }: SnakeGamePageProps) {
     return () => window.removeEventListener('keydown', handleKey);
   }, [startGame, onBack]);
 
-  const handleJoystickMove = useCallback((dx: number, dy: number, dir: JoystickDirection) => {
-    if (!dir) return;
+  const handleDPadMove = useCallback((dir: DPadDirection) => {
+    resumeAudio();
     const game = gameRef.current;
-    if (!game) return;
-    const state = game.getState();
-    if (state === 'playing') {
-      const currentDir = game.getDirection();
-      if (currentDir !== dir) {
-        game.setDirection(dir);
-        SFX.snakeMove();
-      }
-    }
+    if (!game || game.getState() !== 'playing') return;
+    
+    if (dir === 'UP') game.setDirection('UP');
+    else if (dir === 'DOWN') game.setDirection('DOWN');
+    else if (dir === 'LEFT') game.setDirection('LEFT');
+    else if (dir === 'RIGHT') game.setDirection('RIGHT');
+    SFX.snakeMove();
   }, []);
 
   // Touch / Swipe on the canvas container
@@ -413,13 +411,8 @@ export default function SnakeGamePage({ onBack }: SnakeGamePageProps) {
       </div>
 
       {/* ── Mobile Controls ── */}
-      <div className="flex md:hidden items-center justify-between px-6 pb-6 w-full shrink-0" style={{ maxWidth: CANVAS_SIZE }}>
-        <VirtualJoystick 
-          onMove={handleJoystickMove} 
-          onEnd={() => {}} 
-          size={130} 
-          stickColor={COLORS.accent} 
-        />
+      <div className="flex md:hidden items-end justify-between px-6 pb-6 w-full shrink-0" style={{ maxWidth: CANVAS_SIZE }}>
+        <DPad onDirectionStart={handleDPadMove} size={55} />
         <button
           onTouchStart={(e) => {
             e.preventDefault(); resumeAudio(); HAPTIC.soft();
@@ -429,8 +422,15 @@ export default function SnakeGamePage({ onBack }: SnakeGamePageProps) {
             if (s === 'start' || s === 'gameover') startGame();
             else if (s === 'playing' || s === 'paused') game.togglePause();
           }}
-          className="flex items-center justify-center rounded-full text-2xl font-bold active:scale-90 transition-transform select-none shadow-lg"
-          style={{ width: 80, height: 80, background: '#ffffff0f', border: `3px solid ${COLORS.accentDim}`, color: COLORS.textDim, touchAction: 'none' }}
+          className="flex items-center justify-center rounded-xl text-2xl font-bold active:translate-y-1 transition-transform select-none mb-2"
+          style={{ 
+            width: 80, height: 80, 
+            background: 'rgba(255,255,255,0.1)', 
+            border: `2px solid ${COLORS.accentDim}`, 
+            borderBottomWidth: '6px',
+            color: COLORS.textDim, 
+            touchAction: 'none' 
+          }}
         >
           ⏸
         </button>
