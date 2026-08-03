@@ -2,11 +2,17 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { HAPTIC, SFX, resumeAudio } from '../../utils/feedback';
 
 // ── Constants ─────────────────────────────────────────────────
-const CW = 320, CH = 540;
-const GRAVITY = 0.38;
-const JUMP_VEL = -8.5;
-const PIPE_W = 54, PIPE_GAP = 145, PIPE_SPEED = 2.4;
-const BIRD_X = 75, BIRD_R = 14;
+const CW = 320;
+const getCH = () => {
+  if (typeof window === 'undefined') return 540;
+  const ratio = window.innerHeight / window.innerWidth;
+  return Math.floor(Math.max(500, Math.min(800, CW * ratio * 0.95)));
+};
+const CH = getCH();
+const GRAVITY = 0.35;
+const JUMP_VEL = -8.0;
+const PIPE_W = 44, PIPE_GAP = 120, PIPE_SPEED = 2.4;
+const BIRD_X = 75, BIRD_R = 10;
 const GROUND_H = 50;
 
 // ── Parallax star layers ───────────────────────────────────────

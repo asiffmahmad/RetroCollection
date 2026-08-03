@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 
 // ── Constants ─────────────────────────────────────────────────
-const COLS = 10;
-const ROWS = 20;
+const COLS = 14;
+const ROWS = 28;
 const CELL = 24;
-const CW = COLS * CELL; // 240
-const CH = ROWS * CELL; // 480
+const CW = COLS * CELL; // 336
+const CH = ROWS * CELL; // 672
 const MINI_W = 96;
 const MINI_H = 76;
 const SPEEDS = [800, 700, 600, 500, 400, 300, 240, 180, 120, 90, 70]; // ms/drop per level

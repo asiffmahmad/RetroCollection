@@ -9,9 +9,9 @@ type MState = 'idle' | 'playing' | 'won' | 'lost';
 
 // ── Config ─────────────────────────────────────────────────────
 const CONFIGS: Record<Difficulty, { rows: number; cols: number; mines: number; cell: number }> = {
-  easy:   { rows: 9,  cols: 9,  mines: 10, cell: 34 },
-  medium: { rows: 12, cols: 12, mines: 25, cell: 26 },
-  hard:   { rows: 16, cols: 16, mines: 45, cell: 20 },
+  easy:   { rows: 15, cols: 10, mines: 20, cell: 24 },
+  medium: { rows: 20, cols: 12, mines: 45, cell: 20 },
+  hard:   { rows: 26, cols: 14, mines: 80, cell: 16 },
 };
 
 // ── Number colors (neon retro) ─────────────────────────────────

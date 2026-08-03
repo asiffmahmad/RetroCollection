@@ -14,10 +14,10 @@ const getCH = () => {
 };
 const CH = getCH();
 const PADDLE_H = 10, PADDLE_Y = CH - 40;
-const BALL_R = 7;
-const BRICK_COLS = 10, BRICK_ROWS = 7;
-const BRICK_W = CW / BRICK_COLS;    // 32
-const BRICK_H = 18;
+const BALL_R = 4;
+const BRICK_COLS = 16, BRICK_ROWS = 12;
+const BRICK_W = CW / BRICK_COLS;
+const BRICK_H = 12;
 const BRICK_TOP = 60;
 const BRICK_GAP = 2;
 const MAX_LIVES = 3;

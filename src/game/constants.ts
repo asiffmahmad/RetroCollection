@@ -1,6 +1,6 @@
 // Grid & sizing
-export const GRID_SIZE = 20;
-export const CELL_SIZE = 24;
+export const GRID_SIZE = 30;
+export const CELL_SIZE = 16;
 export const CANVAS_SIZE = GRID_SIZE * CELL_SIZE; // 480
 
 // Timing
