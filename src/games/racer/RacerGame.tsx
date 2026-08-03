@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { RacerEngine, GameState } from './RacerEngine';
 import { HAPTIC, SFX, resumeAudio } from '../../utils/feedback';
-import VirtualJoystick, { JoystickDirection } from '../../components/VirtualJoystick';
 import { THEME } from '../../theme';
 
 interface RacerGameProps {
@@ -107,27 +106,28 @@ export default function RacerGame({ onBack }: RacerGameProps) {
     };
   }, [startGame, onBack]);
 
-  const handleJoystickMove = useCallback((dx: number, dy: number, dir: JoystickDirection) => {
+  const handleLeftStart = useCallback((e: React.TouchEvent | React.MouseEvent) => {
+    e.preventDefault();
     resumeAudio();
-    if (!engineRef.current) return;
-    
-    if (dx < -0.2) {
-      engineRef.current.keyLeft = true;
-      engineRef.current.keyRight = false;
-    } else if (dx > 0.2) {
-      engineRef.current.keyRight = true;
-      engineRef.current.keyLeft = false;
-    } else {
-      engineRef.current.keyLeft = false;
-      engineRef.current.keyRight = false;
-    }
+    if (engineRef.current) engineRef.current.keyLeft = true;
+    HAPTIC.soft();
   }, []);
 
-  const handleJoystickEnd = useCallback(() => {
-    if (engineRef.current) {
-      engineRef.current.keyLeft = false;
-      engineRef.current.keyRight = false;
-    }
+  const handleLeftEnd = useCallback((e: React.TouchEvent | React.MouseEvent) => {
+    e.preventDefault();
+    if (engineRef.current) engineRef.current.keyLeft = false;
+  }, []);
+
+  const handleRightStart = useCallback((e: React.TouchEvent | React.MouseEvent) => {
+    e.preventDefault();
+    resumeAudio();
+    if (engineRef.current) engineRef.current.keyRight = true;
+    HAPTIC.soft();
+  }, []);
+
+  const handleRightEnd = useCallback((e: React.TouchEvent | React.MouseEvent) => {
+    e.preventDefault();
+    if (engineRef.current) engineRef.current.keyRight = false;
   }, []);
 
   const handleGasStart = useCallback((e: React.TouchEvent | React.MouseEvent) => {
@@ -209,22 +209,42 @@ export default function RacerGame({ onBack }: RacerGameProps) {
         </div>
       )}
 
-      <div className="absolute bottom-0 left-0 w-full flex md:hidden items-center justify-between p-6 z-10">
-        <VirtualJoystick 
-          onMove={handleJoystickMove} 
-          onEnd={handleJoystickEnd} 
-          size={120} 
-          stickColor={'#00ccff'} 
-        />
+      <div className="absolute bottom-0 left-0 w-full flex md:hidden items-end justify-between p-4 z-10 pointer-events-none">
         
-        <div className="flex gap-4">
+        {/* Left/Right Retro D-Pad */}
+        <div className="flex gap-2 pointer-events-auto mb-2">
+          <button
+            onTouchStart={handleLeftStart}
+            onTouchEnd={handleLeftEnd}
+            onMouseDown={handleLeftStart}
+            onMouseUp={handleLeftEnd}
+            onMouseLeave={handleLeftEnd}
+            className="w-[65px] h-[65px] flex items-center justify-center rounded-xl text-3xl font-bold select-none active:scale-90 transition-transform shadow-lg"
+            style={{ background: 'rgba(255,255,255,0.1)', border: `2px solid rgba(255,255,255,0.3)`, color: '#fff', touchAction: 'none' }}
+          >
+            ←
+          </button>
+          
+          <button
+            onTouchStart={handleRightStart}
+            onTouchEnd={handleRightEnd}
+            onMouseDown={handleRightStart}
+            onMouseUp={handleRightEnd}
+            onMouseLeave={handleRightEnd}
+            className="w-[65px] h-[65px] flex items-center justify-center rounded-xl text-3xl font-bold select-none active:scale-90 transition-transform shadow-lg"
+            style={{ background: 'rgba(255,255,255,0.1)', border: `2px solid rgba(255,255,255,0.3)`, color: '#fff', touchAction: 'none' }}
+          >
+            →
+          </button>
+        </div>
+        <div className="flex gap-3 pointer-events-auto">
           <button
             onTouchStart={handleBrakeStart}
             onTouchEnd={handleBrakeEnd}
             onMouseDown={handleBrakeStart}
             onMouseUp={handleBrakeEnd}
             onMouseLeave={handleBrakeEnd}
-            className="w-[70px] h-[70px] rounded-full flex items-center justify-center text-xl font-bold select-none active:scale-90 transition-transform shadow-lg"
+            className="w-[65px] h-[65px] rounded-full flex items-center justify-center text-lg font-bold select-none active:scale-90 transition-transform shadow-lg mt-4"
             style={{ background: 'rgba(255, 51, 102, 0.2)', border: `3px solid #ff3366`, color: '#ff3366', touchAction: 'none' }}
           >
             BRK
@@ -236,7 +256,7 @@ export default function RacerGame({ onBack }: RacerGameProps) {
             onMouseDown={handleGasStart}
             onMouseUp={handleGasEnd}
             onMouseLeave={handleGasEnd}
-            className="w-[90px] h-[90px] rounded-full flex items-center justify-center text-xl font-bold select-none active:scale-90 transition-transform shadow-lg"
+            className="w-[85px] h-[85px] rounded-full flex items-center justify-center text-xl font-bold select-none active:scale-90 transition-transform shadow-lg"
             style={{ background: 'rgba(0, 204, 255, 0.2)', border: `3px solid #00ccff`, color: '#00ccff', touchAction: 'none' }}
           >
             GAS
