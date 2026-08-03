@@ -130,5 +130,16 @@ export const GAMES: GameMeta[] = [
     status: 'playable',
     bestScoreKey: 'bomberman_best',
   },
+  {
+    id: 'racer',
+    title: 'OutRun',
+    emoji: '🏎️',
+    description: 'A classic pseudo-3D retro racing game. Dodge traffic, hit max speed, and enjoy the synthwave sunset.',
+    color: '#00ccff',
+    colorGlow: '#00ccff44',
+    tags: ['Arcade', 'Racing', 'Retro'],
+    status: 'playable',
+    bestScoreKey: 'racer_best',
+  },
 ];
 

@@ -7,6 +7,7 @@ import MinesweeperGamePage from './games/minesweeper/MinesweeperGame';
 import FlappyGamePage from './games/flappy/FlappyGame';
 import Game2048Page from './games/2048/Game2048';
 import BombermanGamePage from './games/bomberman/BombermanGame';
+import RacerGamePage from './games/racer/RacerGame';
 
 type Screen = { type: 'dashboard' } | { type: 'game'; gameId: string };
 
@@ -71,6 +72,7 @@ export default function App() {
         case 'flappy':   return wrap(<FlappyGamePage onBack={handleBack} />);
         case '2048':     return wrap(<Game2048Page onBack={handleBack} />);
         case 'bomberman': return wrap(<BombermanGamePage onBack={handleBack} />);
+        case 'racer': return wrap(<RacerGamePage onBack={handleBack} />);
         default:
           handleBack();
           return null;
